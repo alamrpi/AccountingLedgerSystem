@@ -1,0 +1,59 @@
+﻿# === .NET & Visual Studio ===
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.vs/
+*.vscode/
+*.idea/
+*.ncrunch*
+*.local.xml
+*.DotSettings.user
+
+# Build results
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+artifacts/
+
+# NuGet
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# Entity Framework
+Migrations/
+
+# Rider
+*.sln.iml
+
+# === React (frontend) ===
+node_modules/
+build/
+dist/
+.env
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# === OS-specific ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Publish output ===
+publish/
+*.Publish.xml
+*.pubxml
+*.publishproj
+
+# === Others ===
+*.log
+*.tmp
+*.bak
+*.swp
