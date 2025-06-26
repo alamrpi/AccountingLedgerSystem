@@ -1,11 +1,4 @@
-﻿using AccountingLedgerSystem.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AccountingLedgerSystem.Application.DTOs
+﻿namespace AccountingLedgerSystem.Application.DTOs
 {
     public class JournalEntryDto
     {
@@ -13,7 +6,7 @@ namespace AccountingLedgerSystem.Application.DTOs
         public DateTime Date { get; set; }
         public string? Description { get; set; }
         public DateTime CreatedAt { get; set; }
-        public IEnumerable<JournalEntryLineDto> JournalEntryLines { get; set; } = new List<JournalEntryLineDto>();
+        //public IEnumerable<JournalEntryLineDto> JournalEntryLines { get; set; } = new List<JournalEntryLineDto>();
     }
 }
 

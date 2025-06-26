@@ -1,6 +1,7 @@
 using AccountingLedgerSystem.Application.Extensions;
 using AccountingLedgerSystem.Application.Features.Queries.Accounts;
 using AccountingLedgerSystem.Application.Mappings;
+using AccountingLedgerSystem.Application.Validators;
 using AccountingLedgerSystem.Infrastructure;
 using FluentValidation;
 using System.Reflection;
@@ -41,8 +42,7 @@ internal class Program
         builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
         builder.Services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssembly(typeof(GetAccountsQueryHandler).Assembly));
-
-        builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+        builder.Services.AddValidatorsFromAssembly(typeof(JournalEntryValidator).Assembly);
 
         var app = builder.Build();
 

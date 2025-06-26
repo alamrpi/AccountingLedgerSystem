@@ -57,3 +57,5 @@ publish/
 *.tmp
 *.bak
 *.swp
+/src/AccountingLedgerSystem.Database/AccountingLedgerSystem.Database.dbmdl
+/src/AccountingLedgerSystem.Database/AccountingLedgerSystem.Database.jfm

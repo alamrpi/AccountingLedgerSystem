@@ -1,5 +1,6 @@
 ﻿using AccountingLedgerSystem.Application.DTOs;
 using AccountingLedgerSystem.Core.Entities;
+using AccountingLedgerSystem.Shared.Dto;
 using AutoMapper;
 
 namespace AccountingLedgerSystem.Application.Mappings
@@ -12,6 +13,8 @@ namespace AccountingLedgerSystem.Application.Mappings
             CreateMap<AccountCreateRequestDto, Account>().ReverseMap();
             CreateMap<JournalEntryDto, JournalEntry>().ReverseMap();
             CreateMap<JournalEntryLineDto, JournalEntryLine>().ReverseMap();
+            CreateMap<JournalEntryRequestDto, JournalEntry>().ReverseMap();
+            CreateMap<JournalEntryLineRequestDto, JournalEntryLine>().ReverseMap();
         }
     }
 }

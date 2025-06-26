@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace AccountingLedgerSystem.Application.Validators
 {
-    public class JournalEntryValidator : AbstractValidator<JournalEntryDto>
+    public class JournalEntryValidator : AbstractValidator<JournalEntryRequestDto>
     {
         public JournalEntryValidator()
         {

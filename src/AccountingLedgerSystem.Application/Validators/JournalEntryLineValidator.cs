@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AccountingLedgerSystem.Application.Validators
 {
-    internal class JournalEntryLineValidator : AbstractValidator<JournalEntryLineDto>
+    internal class JournalEntryLineValidator : AbstractValidator<JournalEntryLineRequestDto>
     {
         public JournalEntryLineValidator()
         {

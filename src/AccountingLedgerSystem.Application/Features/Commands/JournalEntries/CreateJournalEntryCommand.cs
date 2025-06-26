@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AccountingLedgerSystem.Application.Features.Commands.JournalEntries
 {
-    public record CreateJournalEntryCommand(JournalEntryDto JournalEntry) : IRequest<int>;
+    public record CreateJournalEntryCommand(JournalEntryRequestDto JournalEntry) : IRequest<int>;
 
 
     public class CreateJournalEntryCommandHandler : IRequestHandler<CreateJournalEntryCommand, int>
