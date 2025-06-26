@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36212.18 d17.14
+VisualStudioVersion = 17.14.36212.18
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -15,7 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountingLedgerSystem.Shar
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "accountingledgersystem.ui", "src\AccountingLedgerSystem.UI\accountingledgersystem.ui.esproj", "{2EE7DA1D-519A-5737-A6AB-18C25F5BB6C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountingLedgerSystem.Domain", "src\AccountingLedgerSystem.Domain\AccountingLedgerSystem.Domain.csproj", "{EEA6E79E-8B04-4A0F-B18A-3CEF8C039EF8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccountingLedgerSystem.Core", "src\AccountingLedgerSystem.Domain\AccountingLedgerSystem.Core.csproj", "{EEA6E79E-8B04-4A0F-B18A-3CEF8C039EF8}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "AccountingLedgerSystem.Database", "src\AccountingLedgerSystem.Database\AccountingLedgerSystem.Database.sqlproj", "{E68B1A4A-DD67-4BF4-9C85-576D0004CB75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,12 @@ Global
 		{EEA6E79E-8B04-4A0F-B18A-3CEF8C039EF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEA6E79E-8B04-4A0F-B18A-3CEF8C039EF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEA6E79E-8B04-4A0F-B18A-3CEF8C039EF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E68B1A4A-DD67-4BF4-9C85-576D0004CB75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E68B1A4A-DD67-4BF4-9C85-576D0004CB75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E68B1A4A-DD67-4BF4-9C85-576D0004CB75}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E68B1A4A-DD67-4BF4-9C85-576D0004CB75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E68B1A4A-DD67-4BF4-9C85-576D0004CB75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E68B1A4A-DD67-4BF4-9C85-576D0004CB75}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +68,7 @@ Global
 		{EA87ABA5-521D-4258-989E-F302AC469018} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{2EE7DA1D-519A-5737-A6AB-18C25F5BB6C1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{EEA6E79E-8B04-4A0F-B18A-3CEF8C039EF8} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{E68B1A4A-DD67-4BF4-9C85-576D0004CB75} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {807782D3-EA44-4E97-8B04-C370D612B555}
