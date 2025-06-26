@@ -19,27 +19,27 @@ namespace AccountingLedgerSystem.Infrastructure.Repositories
         public async Task<int> CreateAsync(Account account)
         {
             var parameters = new SqlParameter[]
-            {
-          
+          {
+
             new("@Name", account.Name),
             new("@Type", (int)account.Type),
             new("@Description", account.Description ?? (object)DBNull.Value),
             new("@NewId", SqlDbType.Int) { Direction = ParameterDirection.Output }
-            };
+          };
 
             await _context.Database.ExecuteSqlRawAsync(
-                "EXEC spAccounts_Create @Name, @Type, @Description, @NewId OUTPUT",
+                "EXEC [usp_CreateAccount] @Name, @Type, @Description, @NewId OUTPUT",
                 parameters);
 
-            return (int)parameters[6].Value;
+            return (int)parameters[3].Value;
         }
 
         public async Task<IEnumerable<Account>> GetAllAsync()
         {
             return await _context.Accounts
-                .FromSqlRaw("EXEC spAccounts_GetAll")
-                .AsNoTracking()
-                .ToListAsync();
+                 .FromSqlRaw("EXEC usp_GetAllAccounts")
+                 .AsNoTracking()
+                 .ToListAsync();
         }
     }
 }
