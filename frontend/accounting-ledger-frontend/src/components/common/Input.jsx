@@ -9,6 +9,8 @@ const Input = forwardRef(({
   className = '',
   error,
   helperText,
+  value,
+  onChange,
   ...props
 }, ref) => {
   return (
@@ -22,8 +24,10 @@ const Input = forwardRef(({
         ref={ref}
         id={id}
         type={type}
+        value={value}
+        onChange={onChange}
         className={twMerge(
-          'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm',
+          'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 h-10', // Increased height
           error ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500' : '',
           className
         )}
@@ -46,6 +50,8 @@ Input.propTypes = {
   className: PropTypes.string,
   error: PropTypes.string,
   helperText: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 Input.displayName = 'Input';

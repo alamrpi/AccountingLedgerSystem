@@ -4,7 +4,7 @@ import { useNotification } from '../contexts/NotificationContext';
 
 export const useJournalEntries = () => {
   const [entries, setEntries] = useState({ items: [] });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { showNotification } = useNotification();
 
   const loadEntries = useCallback(async (params = {}) => {
@@ -42,10 +42,6 @@ export const useJournalEntries = () => {
       setIsLoading(false);
     }
   }, [showNotification]);
-
-  // useEffect(() => {
-  //   loadEntries();
-  // }, [loadEntries]);
 
   return {
     entries,

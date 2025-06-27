@@ -9,6 +9,8 @@ const Select = forwardRef(({
   className = '',
   error,
   helperText,
+  value,
+  onChange,
   ...props
 }, ref) => {
   return (
@@ -21,8 +23,10 @@ const Select = forwardRef(({
       <select
         ref={ref}
         id={id}
+        value={value}
+        onChange={onChange}
         className={twMerge(
-          'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm',
+          'block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm py-2 px-3 h-10', // Same height as Input
           error ? 'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500' : '',
           className
         )}
@@ -33,6 +37,7 @@ const Select = forwardRef(({
             key={option.value} 
             value={option.value}
             disabled={option.disabled}
+            className={option.disabled ? 'text-gray-400' : ''}
           >
             {option.label}
           </option>
@@ -61,6 +66,8 @@ Select.propTypes = {
   className: PropTypes.string,
   error: PropTypes.string,
   helperText: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onChange: PropTypes.func,
 };
 
 Select.displayName = 'Select';
