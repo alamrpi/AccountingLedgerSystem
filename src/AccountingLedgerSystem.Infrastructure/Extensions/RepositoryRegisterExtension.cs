@@ -10,6 +10,7 @@ namespace AccountingLedgerSystem.Infrastructure.Extensions
         {
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IJournalEntryRepository, JournalEntryRepository>();
+            services.AddScoped<ITrialBalanceRepository, TrialBalanceRepository>();
             return services;
         }
     }

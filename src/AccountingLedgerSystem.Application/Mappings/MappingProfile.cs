@@ -15,6 +15,7 @@ namespace AccountingLedgerSystem.Application.Mappings
             CreateMap<JournalEntryLineDto, JournalEntryLine>().ReverseMap();
             CreateMap<JournalEntryRequestDto, JournalEntry>().ReverseMap();
             CreateMap<JournalEntryLineRequestDto, JournalEntryLine>().ReverseMap();
+            CreateMap<TrialBalanceDto, TrialBalanceItem>().ReverseMap();
         }
     }
 }
