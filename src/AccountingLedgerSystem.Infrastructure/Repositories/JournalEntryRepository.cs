@@ -21,39 +21,7 @@ namespace AccountingLedgerSystem.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public async Task<JournalEntry> GetByIdAsync(int id)
-        {
-            try
-            {
-                // Get journal entry header
-                var entryParameters = new[] { new SqlParameter("@Id", id) };
-
-                var entry = await _context.JournalEntries
-                    .FromSqlRaw("EXEC [dbo].[usp_JournalEntry_GetById] @Id", entryParameters)
-                    .AsNoTracking()
-                    .FirstOrDefaultAsync();
-
-                if (entry == null)
-                {
-                    throw new KeyNotFoundException($"Journal entry with ID {id} not found.");
-                }
-
-                // Get journal entry lines
-                var lineParameters = new[] { new SqlParameter("@JournalEntryId", id) };
-                entry.JournalEntryLines = await _context.JournalEntryLines
-                    .FromSqlRaw("EXEC [dbo].[usp_JournalEntryLine_GetByJournalEntryId] @JournalEntryId", lineParameters)
-                    .AsNoTracking()
-                    .ToListAsync();
-
-                return entry;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error getting journal entry by ID {Id}", id);
-                throw;
-            }
-        }
-
+      
         public async Task<PaginatedResult<JournalEntryWithLinesDto>> GetPaginatedAsync(JournalEntriesQueryParams queryParams)
         {
             try
@@ -158,28 +126,6 @@ namespace AccountingLedgerSystem.Infrastructure.Repositories
                 throw;
             }
         }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            await using var transaction = await _context.Database.BeginTransactionAsync();
-
-            try
-            {
-                var parameters = new[] { new SqlParameter("@Id", id) };
-                var result = await _context.Database.ExecuteSqlRawAsync(
-                    "EXEC [dbo].[usp_JournalEntry_Delete] @Id", parameters);
-
-                await transaction.CommitAsync();
-                return result > 0;
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-                _logger.LogError(ex, "Error deleting journal entry with ID {Id}", id);
-                throw;
-            }
-        }
-
         private async Task CreateJournalEntryLinesAsync(int journalEntryId, ICollection<JournalEntryLine> lines)
         {
             // Create DataTable for TVP

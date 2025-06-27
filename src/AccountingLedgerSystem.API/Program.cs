@@ -3,7 +3,9 @@ using AccountingLedgerSystem.Application.Features.Queries.Accounts;
 using AccountingLedgerSystem.Application.Mappings;
 using AccountingLedgerSystem.Application.Validators;
 using AccountingLedgerSystem.Infrastructure;
+using AccountingLedgerSystem.Infrastructure.Data;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -53,6 +55,12 @@ internal class Program
         builder.Services.AddValidatorsFromAssembly(typeof(JournalEntryValidator).Assembly);
 
         var app = builder.Build();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            db.Database.Migrate();
+        }
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
