@@ -54,17 +54,23 @@ namespace AccountingLedgerSystem.Infrastructure.Repositories
             }
         }
 
-        public async Task<PaginatedResult<JournalEntryWithLinesDto>> GetPaginatedAsync(int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginatedResult<JournalEntryWithLinesDto>> GetPaginatedAsync(JournalEntriesQueryParams queryParams)
         {
             try
             {
-                _logger.LogInformation("Fetching paginated journal entries - Page {PageNumber}, Size {PageSize}",
-                    pageNumber, pageSize);
+                _logger.LogInformation(
+                    "Fetching journal entries - Page {PageNumber}, Size {PageSize}, Sort: {SortField} {SortDirection}, Date: {DateFilter}",
+                    queryParams.PageNumber, queryParams.PageSize,
+                    queryParams.SortField, queryParams.SortDirection,
+                    queryParams.Date?.ToString("yyyy-MM-dd"));
 
                 var parameters = new[]
                 {
-            new SqlParameter("@PageNumber", pageNumber),
-            new SqlParameter("@PageSize", pageSize),
+            new SqlParameter("@PageNumber", queryParams.PageNumber),
+            new SqlParameter("@PageSize", queryParams.PageSize),
+            new SqlParameter("@SortField", queryParams.SortField ?? "Date"),
+            new SqlParameter("@SortDirection", queryParams.SortDirection ?? "DESC"),
+            new SqlParameter("@DateFilter", queryParams.Date ?? (object)DBNull.Value),
             new SqlParameter("@TotalCount", SqlDbType.Int) { Direction = ParameterDirection.Output }
         };
 
@@ -81,37 +87,37 @@ namespace AccountingLedgerSystem.Infrastructure.Repositories
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {
-                        // Read the first result set (journal entries)
                         entries = await reader.ToListAsync<JournalEntryWithLinesDto>();
-
                         while (await reader.NextResultAsync()) { }
                     }
 
-                    if (command.Parameters["@TotalCount"].Value != DBNull.Value)
-                    {
-                        totalCount = (int)command.Parameters["@TotalCount"].Value!;
-                    }
+                    totalCount = command.Parameters["@TotalCount"].Value != DBNull.Value
+                        ? (int)command.Parameters["@TotalCount"].Value!
+                        : 0;
                 }
 
-                _logger.LogInformation("Retrieved {Count} of {Total} journal entries (Page {PageNumber})",
-                    entries.Count, totalCount, pageNumber);
+                _logger.LogInformation(
+                    "Retrieved {Count} of {Total} entries (Page {PageNumber} of {TotalPages})",
+                    entries.Count, totalCount, queryParams.PageNumber,
+                    (int)Math.Ceiling(totalCount / (double)queryParams.PageSize));
 
                 return new PaginatedResult<JournalEntryWithLinesDto>
                 {
                     Items = entries,
                     TotalCount = totalCount,
-                    PageNumber = pageNumber,
-                    PageSize = pageSize
+                    PageNumber = queryParams.PageNumber,
+                    PageSize = queryParams.PageSize,
+                   
                 };
             }
             catch (SqlException sqlEx)
             {
-                _logger.LogError(sqlEx, "Database error while fetching paginated journal entries");
+                _logger.LogError(sqlEx, "Database error fetching entries. Params: {@Params}", queryParams);
                 throw;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unexpected error while fetching paginated journal entries");
+                _logger.LogError(ex, "Unexpected error fetching entries. Params: {@Params}", queryParams);
                 throw;
             }
         }

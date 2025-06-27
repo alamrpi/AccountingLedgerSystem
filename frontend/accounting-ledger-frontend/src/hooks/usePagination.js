@@ -6,6 +6,8 @@ export const usePagination = (initialState = {}) => {
     pageSize: initialState.pageSize || 5,
     totalItems: 0,
     totalPages: 1,
+    sortField: initialState.sortField || 'date',
+    sortDirection: initialState.sortDirection || 'desc',
     ...initialState
   });
 
@@ -30,7 +32,18 @@ export const usePagination = (initialState = {}) => {
   const handlePageSizeChange = (newSize) => {
     updatePagination({
       pageSize: newSize,
-      page: 1 // Reset to first page when changing page size
+      page: 1
+    });
+  };
+
+  const handleSortChange = (field) => {
+    updatePagination({
+      sortField: field,
+      sortDirection: 
+        field === pagination.sortField 
+          ? pagination.sortDirection === 'asc' ? 'desc' : 'asc'
+          : 'desc',
+      page: 1
     });
   };
 
@@ -39,9 +52,12 @@ export const usePagination = (initialState = {}) => {
     setPagination: updatePagination,
     handlePageChange,
     handlePageSizeChange,
+    handleSortChange,
     getPaginationParams: () => ({
       pageNumber: pagination.page,
-      pageSize: pagination.pageSize
+      pageSize: pagination.pageSize,
+      sortField: pagination.sortField,
+      sortDirection: pagination.sortDirection
     })
   };
 };

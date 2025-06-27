@@ -51,26 +51,25 @@ namespace AccountingLedgerSystem.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAll(
-            [FromQuery] int pageNumber = 1,
-            [FromQuery] int pageSize = 5)
+            [FromQuery] JournalEntriesQueryParams queryParams)
         {
-            _logger.LogInformation("Fetching journal entries - Page {PageNumber}, Size {PageSize}", pageNumber, pageSize);
+            _logger.LogInformation("Fetching journal entries - Page {PageNumber}, Size {PageSize}", queryParams.PageNumber, queryParams.PageSize);
 
             // Validate pagination parameters
-            if (pageNumber < 1 || pageSize < 1 || pageSize > 100)
+            if (queryParams.PageNumber < 1 || queryParams.PageSize < 1)
             {
-                _logger.LogWarning("Invalid pagination parameters - Page: {PageNumber}, Size: {PageSize}", pageNumber, pageSize);
+                _logger.LogWarning("Invalid pagination parameters - Page: {PageNumber}, Size: {PageSize}", queryParams.PageNumber, queryParams.PageNumber);
                 return BadRequest("Page number must be greater than 0 and page size must be between 1 and 100");
             }
 
             try
             {
-                var result = await _mediator.Send(new GetJournalEntriesQuery(pageNumber, pageSize));
+                var result = await _mediator.Send(new GetJournalEntriesQuery(queryParams));
 
                 _logger.LogInformation(
                     "Retrieved {Count} journal entries (Page {PageNumber} of {TotalPages})",
                     result.Items.Count(),
-                    pageNumber,
+                    queryParams.PageNumber,
                     result.TotalPages);
 
                 return Ok(result);
@@ -79,8 +78,8 @@ namespace AccountingLedgerSystem.API.Controllers
             {
                 _logger.LogError(ex,
                     "Error fetching journal entries - Page {PageNumber}, Size {PageSize}",
-                    pageNumber,
-                    pageSize);
+                    queryParams.PageNumber,
+                    queryParams.PageSize);
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
                     "An error occurred while processing your request");

@@ -13,9 +13,14 @@ const JournalEntriesPage = () => {
     pagination,
     handlePageChange,
     handlePageSizeChange,
+    handleSortChange,
     getPaginationParams,
     setPagination
-  } = usePagination({ pageSize: 5 });
+  } = usePagination({ 
+    pageSize: 5,
+    sortField: 'date',
+    sortDirection: 'desc'
+  });
 
   const { entries, isLoading, loadEntries } = useJournalEntries();
 
@@ -34,7 +39,7 @@ const JournalEntriesPage = () => {
 
   useEffect(() => {
     loadData();
-  }, [pagination.page, pagination.pageSize]);
+  }, [pagination.page, pagination.pageSize, pagination.sortField, pagination.sortDirection]);
 
   useEffect(() => {
     if (entries) {
@@ -89,17 +94,18 @@ const JournalEntriesPage = () => {
       ) : (
         <>
           <div className="bg-white shadow rounded-lg overflow-hidden">
-            <JournalEntryTable entries={entries?.items || []} />
+            <JournalEntryTable 
+              entries={entries?.items || []}
+              sortField={pagination.sortField}
+              sortDirection={pagination.sortDirection}
+              onSortChange={handleSortChange}
+            />
           </div>
           
           <PaginationControls
             pagination={pagination}
-            onPageChange={(page) => {
-              handlePageChange(page);
-            }}
-            onPageSizeChange={(size) => {
-              handlePageSizeChange(size);
-            }}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
           />
         </>
       )}

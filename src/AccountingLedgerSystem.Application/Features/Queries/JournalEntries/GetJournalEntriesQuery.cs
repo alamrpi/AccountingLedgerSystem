@@ -5,7 +5,7 @@ using MediatR;
 
 namespace AccountingLedgerSystem.Application.Features.Queries.JournalEntries
 {
-    public record GetJournalEntriesQuery(int PageNumber, int PageSize) : IRequest<PaginatedResult<JournalEntryWithLinesDto>> { }
+    public record GetJournalEntriesQuery(JournalEntriesQueryParams JournalEntriesQueryParams) : IRequest<PaginatedResult<JournalEntryWithLinesDto>> { }
 
     public class GetJournalEntriesQueryHandler : IRequestHandler<GetJournalEntriesQuery, PaginatedResult<JournalEntryWithLinesDto>>
     {
@@ -20,7 +20,7 @@ namespace AccountingLedgerSystem.Application.Features.Queries.JournalEntries
 
         public async Task<PaginatedResult<JournalEntryWithLinesDto>> Handle(GetJournalEntriesQuery request, CancellationToken cancellationToken)
         {
-            var entries = await _repository.GetPaginatedAsync(request.PageNumber, request.PageSize);
+            var entries = await _repository.GetPaginatedAsync(request.JournalEntriesQueryParams);
             if (entries == null || entries.Items == null || !entries.Items.Any())
             {
                 return new PaginatedResult<JournalEntryWithLinesDto>
