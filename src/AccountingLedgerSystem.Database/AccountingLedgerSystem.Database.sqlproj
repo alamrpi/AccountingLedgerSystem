@@ -58,19 +58,23 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="StoreProcedure" />
-    <Folder Include="StoreProcedure\Account" />
-    <Folder Include="StoreProcedure\JournalEntry" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="dbo\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="StoreProcedure\Account\spAccounts_Create.sql" />
-    <Build Include="StoreProcedure\Account\spAccounts_GetAll.sql" />
-    <Build Include="StoreProcedure\Account\sp_GetAccountsPaginated.sql" />
-    <Build Include="StoreProcedure\JournalEntry\usp_JournalEntry_GetById.sql" />
-    <Build Include="StoreProcedure\JournalEntry\usp_JournalEntry_GetPaginated.sql" />
-    <Build Include="StoreProcedure\JournalEntry\usp_JournalEntry_Create.sql" />
-    <Build Include="StoreProcedure\JournalEntry\usp_JournalEntry_Delete.sql" />
-    <Build Include="StoreProcedure\JournalEntry\usp_JournalEntryLine_GetByJournalEntryId.sql" />
-    <Build Include="StoreProcedure\JournalEntry\usp_JournalEntryLine_CreateBulk.sql" />
+    <Build Include="dbo\Tables\__EFMigrationsHistory.sql" />
+    <Build Include="dbo\Tables\Accounts.sql" />
+    <Build Include="dbo\Tables\JournalEntries.sql" />
+    <Build Include="dbo\Tables\JournalEntryLines.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GenerateTrialBalance.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GetAccountsPaginated.sql" />
+    <Build Include="dbo\Stored Procedures\usp_CreateAccount.sql" />
+    <Build Include="dbo\Stored Procedures\usp_GetAllAccounts.sql" />
+    <Build Include="dbo\Stored Procedures\usp_JournalEntry_Create.sql" />
+    <Build Include="dbo\Stored Procedures\usp_JournalEntry_GetPaginated.sql" />
+    <Build Include="dbo\Stored Procedures\usp_JournalEntryLine_CreateBulk.sql" />
+    <Build Include="dbo\User Defined Types\JournalEntryLineType.sql" />
   </ItemGroup>
 </Project>
