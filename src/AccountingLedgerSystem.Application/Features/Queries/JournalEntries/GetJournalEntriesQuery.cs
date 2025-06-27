@@ -1,14 +1,13 @@
-﻿using AccountingLedgerSystem.Application.DTOs;
-using AccountingLedgerSystem.Core.Interfaces;
+﻿using AccountingLedgerSystem.Core.Interfaces;
 using AccountingLedgerSystem.Shared.Dto;
 using AutoMapper;
 using MediatR;
 
 namespace AccountingLedgerSystem.Application.Features.Queries.JournalEntries
 {
-    public record GetJournalEntriesQuery : IRequest<PaginatedResult<JournalEntryDto>> { }
+    public record GetJournalEntriesQuery(int PageNumber, int PageSize) : IRequest<PaginatedResult<JournalEntryWithLinesDto>> { }
 
-    public class GetJournalEntriesQueryHandler : IRequestHandler<GetJournalEntriesQuery, PaginatedResult<JournalEntryDto>>
+    public class GetJournalEntriesQueryHandler : IRequestHandler<GetJournalEntriesQuery, PaginatedResult<JournalEntryWithLinesDto>>
     {
         private readonly IJournalEntryRepository _repository;
         private readonly IMapper _mapper;
@@ -19,26 +18,20 @@ namespace AccountingLedgerSystem.Application.Features.Queries.JournalEntries
             _mapper = mapper;
         }
 
-        public async Task<PaginatedResult<JournalEntryDto>> Handle(GetJournalEntriesQuery request, CancellationToken cancellationToken)
+        public async Task<PaginatedResult<JournalEntryWithLinesDto>> Handle(GetJournalEntriesQuery request, CancellationToken cancellationToken)
         {
-            var entries = await _repository.GetPaginatedAsync(1, 50);
+            var entries = await _repository.GetPaginatedAsync(request.PageNumber, request.PageSize);
             if (entries == null || entries.Items == null || !entries.Items.Any())
             {
-                return new PaginatedResult<JournalEntryDto>
+                return new PaginatedResult<JournalEntryWithLinesDto>
                 {
-                    Items = new List<JournalEntryDto>(),
+                    Items = new List<JournalEntryWithLinesDto>(),
                     TotalCount = 0,
                     PageNumber = 1,
                     PageSize = 50
                 };
             }
-            return new PaginatedResult<JournalEntryDto>
-            {
-                Items = _mapper.Map<List<JournalEntryDto>>(entries.Items.ToList()),
-                TotalCount = entries.TotalCount,
-                PageNumber = entries.PageNumber,
-                PageSize = entries.PageSize,
-            };
+            return entries;
         }
     }
 }

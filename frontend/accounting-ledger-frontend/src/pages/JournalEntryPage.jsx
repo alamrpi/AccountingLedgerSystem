@@ -1,0 +1,35 @@
+import { useJournalEntries } from '../hooks/useJournalEntries';
+import { useAccounts } from '../hooks/useAccounts';
+import PageHeader from '../components/common/PageHeader';
+import JournalEntryForm from '../components/accounting/JournalEntryForm';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+
+const JournalEntryPage = () => {
+  const { accounts, isLoading: isLoadingAccounts } = useAccounts();
+  const { addEntry, isLoading: isSubmitting } = useJournalEntries();
+
+  const handleSubmit = async (formData) => {
+    await addEntry(formData);
+  };
+
+  return (
+    <div>
+      <PageHeader
+        title="Add Journal Entry"
+        description="Create a new journal entry following double-entry accounting principles"
+      />
+
+      {isLoadingAccounts ? (
+        <LoadingSpinner />
+      ) : (
+        <JournalEntryForm
+          accounts={accounts}
+          onSubmit={handleSubmit}
+          isLoading={isSubmitting}
+        />
+      )}
+    </div>
+  );
+};
+
+export default JournalEntryPage;

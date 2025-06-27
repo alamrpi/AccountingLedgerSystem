@@ -2,10 +2,12 @@
 using AccountingLedgerSystem.Application.Features.Commands.JournalEntries;
 using AccountingLedgerSystem.Application.Features.Queries.JournalEntries;
 using AccountingLedgerSystem.Application.Validators;
+using AccountingLedgerSystem.Shared.Dto;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Mime;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mime;
+using System.Text.Json;
 
 namespace AccountingLedgerSystem.API.Controllers
 {
@@ -33,30 +35,55 @@ namespace AccountingLedgerSystem.API.Controllers
         }
 
         /// <summary>
-        /// Retrieves all journal entries from the ledger
+        /// Retrieves journal entries with pagination support
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// GET /api/journal-entries
+        /// GET /api/journal-entries?pageNumber=1&amp;pageSize=10
         /// </remarks>
-        /// <response code="200">Returns the list of journal entries</response>
+        /// <param name="pageNumber">Page number (default: 1)</param>
+        /// <param name="pageSize">Number of items per page (default: 10)</param>
+        /// <response code="200">Returns the paginated list of journal entries</response>
+        /// <response code="400">If pagination parameters are invalid</response>
         /// <response code="500">If there was an internal server error</response>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<JournalEntryDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(PaginatedResult<JournalEntryWithLinesDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 5)
         {
-            _logger.LogInformation("Starting to fetch all journal entries");
+            _logger.LogInformation("Fetching journal entries - Page {PageNumber}, Size {PageSize}", pageNumber, pageSize);
+
+            // Validate pagination parameters
+            if (pageNumber < 1 || pageSize < 1 || pageSize > 100)
+            {
+                _logger.LogWarning("Invalid pagination parameters - Page: {PageNumber}, Size: {PageSize}", pageNumber, pageSize);
+                return BadRequest("Page number must be greater than 0 and page size must be between 1 and 100");
+            }
+
             try
             {
-                var entries = await _mediator.Send(new GetJournalEntriesQuery());
-                _logger.LogInformation("Successfully retrieved {Count} journal entries", entries.Items.Count());
-                return Ok(entries);
+                var result = await _mediator.Send(new GetJournalEntriesQuery(pageNumber, pageSize));
+
+                _logger.LogInformation(
+                    "Retrieved {Count} journal entries (Page {PageNumber} of {TotalPages})",
+                    result.Items.Count(),
+                    pageNumber,
+                    result.TotalPages);
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while fetching journal entries");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request");
+                _logger.LogError(ex,
+                    "Error fetching journal entries - Page {PageNumber}, Size {PageSize}",
+                    pageNumber,
+                    pageSize);
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    "An error occurred while processing your request");
             }
         }
 

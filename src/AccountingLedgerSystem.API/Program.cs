@@ -36,7 +36,15 @@ internal class Program
             }
             
         });
-
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+        });
         builder.Services.AddApplicationServices();
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
@@ -55,8 +63,7 @@ internal class Program
 
         app.UseHttpsRedirection();
 
-        app.UseAuthorization();
-
+        app.UseCors("AllowAll");
         app.MapControllers();
 
         app.Run();

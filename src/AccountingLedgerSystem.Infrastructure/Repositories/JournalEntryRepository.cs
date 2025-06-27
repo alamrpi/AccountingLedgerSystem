@@ -1,6 +1,7 @@
 ﻿using AccountingLedgerSystem.Core.Entities;
 using AccountingLedgerSystem.Core.Interfaces;
 using AccountingLedgerSystem.Infrastructure.Data;
+using AccountingLedgerSystem.Infrastructure.Extensions;
 using AccountingLedgerSystem.Shared.Dto;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -53,27 +54,49 @@ namespace AccountingLedgerSystem.Infrastructure.Repositories
             }
         }
 
-        public async Task<PaginatedResult<JournalEntry>> GetPaginatedAsync(int pageNumber = 1, int pageSize = 10)
+        public async Task<PaginatedResult<JournalEntryWithLinesDto>> GetPaginatedAsync(int pageNumber = 1, int pageSize = 10)
         {
             try
             {
+                _logger.LogInformation("Fetching paginated journal entries - Page {PageNumber}, Size {PageSize}",
+                    pageNumber, pageSize);
+
                 var parameters = new[]
                 {
-                new SqlParameter("@PageNumber", pageNumber),
-                new SqlParameter("@PageSize", pageSize),
-                new SqlParameter("@TotalCount", SqlDbType.Int) { Direction = ParameterDirection.Output }
-            };
+            new SqlParameter("@PageNumber", pageNumber),
+            new SqlParameter("@PageSize", pageSize),
+            new SqlParameter("@TotalCount", SqlDbType.Int) { Direction = ParameterDirection.Output }
+        };
 
-                // Get paginated entries
-                var entries = await _context.JournalEntries
-                    .FromSqlRaw("EXEC [dbo].[usp_JournalEntry_GetPaginated] @PageNumber, @PageSize, @TotalCount OUTPUT", parameters)
-                    .AsNoTracking()
-                    .ToListAsync();
+                var entries = new List<JournalEntryWithLinesDto>();
+                int totalCount = 0;
 
-                // Get total count from output parameter
-                var totalCount = (int)parameters[2].Value;
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
+                {
+                    command.CommandText = "dbo.usp_JournalEntry_GetPaginated";
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddRange(parameters);
 
-                return new PaginatedResult<JournalEntry>
+                    await _context.Database.OpenConnectionAsync();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        // Read the first result set (journal entries)
+                        entries = await reader.ToListAsync<JournalEntryWithLinesDto>();
+
+                        while (await reader.NextResultAsync()) { }
+                    }
+
+                    if (command.Parameters["@TotalCount"].Value != DBNull.Value)
+                    {
+                        totalCount = (int)command.Parameters["@TotalCount"].Value!;
+                    }
+                }
+
+                _logger.LogInformation("Retrieved {Count} of {Total} journal entries (Page {PageNumber})",
+                    entries.Count, totalCount, pageNumber);
+
+                return new PaginatedResult<JournalEntryWithLinesDto>
                 {
                     Items = entries,
                     TotalCount = totalCount,
@@ -81,9 +104,14 @@ namespace AccountingLedgerSystem.Infrastructure.Repositories
                     PageSize = pageSize
                 };
             }
+            catch (SqlException sqlEx)
+            {
+                _logger.LogError(sqlEx, "Database error while fetching paginated journal entries");
+                throw;
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting paginated journal entries");
+                _logger.LogError(ex, "Unexpected error while fetching paginated journal entries");
                 throw;
             }
         }
