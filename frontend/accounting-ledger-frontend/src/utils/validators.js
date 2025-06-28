@@ -1,5 +1,6 @@
 export const validateJournalEntry = (entry) => {
   const errors = {};
+
   let totalDebit = 0;
   let totalCredit = 0;
 
@@ -13,8 +14,12 @@ export const validateJournalEntry = (entry) => {
     const debit = parseFloat(line.debit) || 0;
     const credit = parseFloat(line.credit) || 0;
     
-    if (debit < 0 || credit < 0) {
-      lineError.amount = 'Amount must be positive';
+    if (credit < 0) {
+      lineError.credit = 'Amount must be positive';
+    }
+
+     if (debit < 0 ) {
+      lineError.debit = 'Amount must be positive';
     }
     
     if (debit > 0 && credit > 0) {
@@ -48,6 +53,7 @@ export const validateJournalEntry = (entry) => {
   return {
     isValid: Object.keys(errors).length === 0,
     errors,
+    lineErrors,
     totalDebit,
     totalCredit,
   };

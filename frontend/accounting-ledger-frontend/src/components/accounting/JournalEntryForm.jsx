@@ -17,7 +17,7 @@ const JournalEntryForm = ({ accounts, onSubmit, isLoading }) => {
     ],
   });
 
-  const { isValid, errors, totalDebit, totalCredit } = useMemo(
+  const { isValid, errors, lineErrors, totalDebit, totalCredit } = useMemo(
     () => validateJournalEntry(entryData),
     [entryData]
   );
@@ -87,6 +87,7 @@ const JournalEntryForm = ({ accounts, onSubmit, isLoading }) => {
         <Input
           label="Description"
           name="description"
+          error={errors.description}
           value={entryData.description}
           onChange={handleChange}
           required
@@ -100,6 +101,7 @@ const JournalEntryForm = ({ accounts, onSubmit, isLoading }) => {
           <div key={index} className="grid grid-cols-12 gap-4 items-end">
             <div className="col-span-5">
               <Select
+                error={lineErrors[index]?.accountId}
                 label={`Account ${index + 1}`}
                 value={line.accountId}
                 onChange={(e) => handleLineChange(index, 'accountId', e.target.value)}
@@ -110,6 +112,7 @@ const JournalEntryForm = ({ accounts, onSubmit, isLoading }) => {
 
             <div className="col-span-3">
               <Input
+                error={lineErrors[index]?.debit || lineErrors[index]?.amount}
                 label="Debit"
                 type="number"
                 min="0"
@@ -121,6 +124,7 @@ const JournalEntryForm = ({ accounts, onSubmit, isLoading }) => {
 
             <div className="col-span-3">
               <Input
+                error={lineErrors[index]?.credit || lineErrors[index]?.amount}
                 label="Credit"
                 type="number"
                 min="0"

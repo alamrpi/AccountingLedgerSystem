@@ -9,8 +9,8 @@ namespace AccountingLedgerSystem.Core.Entities
         public decimal Debit { get; set; }
         public decimal Credit { get; set; }
 
-        public JournalEntry JournalEntry { get; set; } = new JournalEntry();
+        public JournalEntry JournalEntry { get; set; }
 
-        public Account Account { get; set; } = new Account();
+        public Account Account { get; set; }
     }
 }
