@@ -1,4 +1,9 @@
 # Accounting Ledger System - Full Setup Guide
+## Prerequisites
+
+- .NET 8 SDK
+- Node.js (for React frontend)
+- SQL Server (or compatible database)
 
 ## Backend (.NET 8 API) Setup
 
@@ -6,9 +11,10 @@
 Edit `appsettings.json` in the API project:
 ```json
 "ConnectionStrings": {
-  "DefaultConnection": "Server=.;Database=db-als;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True;Connection Timeout=30;"
+  "DefaultConnection": ""
 }
 ```
+ Add your database connection string in 'DefaultConnection'
 
 ### 2. Run the API
 #### Option A: Visual Studio
