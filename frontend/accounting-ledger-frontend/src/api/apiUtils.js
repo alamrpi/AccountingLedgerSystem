@@ -56,7 +56,7 @@ export const withErrorHandling = async (apiCall, onSuccess, onError) => {
             .join('\n')
         : errorInfo.detail || errorInfo.message;
       
-      alert(errorMessage); 
+      //alert(errorMessage); 
     }
     
     throw errorInfo;
