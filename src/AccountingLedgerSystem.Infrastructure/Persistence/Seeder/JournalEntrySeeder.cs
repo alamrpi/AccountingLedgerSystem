@@ -1,11 +1,6 @@
 ﻿using AccountingLedgerSystem.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AccountingLedgerSystem.Infrastructure.Persistence.Seeder
 {
@@ -13,7 +8,7 @@ namespace AccountingLedgerSystem.Infrastructure.Persistence.Seeder
     {
         public void Configure(EntityTypeBuilder<JournalEntry> builder)
         {
-         
+
             // Seed test journal entries
             builder.HasData(
                 GetTestJournalEntries()

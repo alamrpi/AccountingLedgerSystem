@@ -1,6 +1,5 @@
 ﻿using AccountingLedgerSystem.Application.DTOs;
 using AccountingLedgerSystem.Core.Entities;
-using AccountingLedgerSystem.Shared.Dto;
 using AutoMapper;
 
 namespace AccountingLedgerSystem.Application.Mappings

@@ -64,10 +64,7 @@ public sealed class AccountsController(IMediator mediator, ILogger<AccountsContr
         using var scope = logger.BeginScope("POST {Endpoint} for {AccountName}", nameof(CreateAccount), request.Name);
 
         if (!ModelState.IsValid)
-        {
-            logger.LogWarning("Invalid request data {@Request}", request);
-            return ValidationProblem(ModelState);
-        }
+            return InvalidModel(request);
 
         try
         {
@@ -85,5 +82,11 @@ public sealed class AccountsController(IMediator mediator, ILogger<AccountsContr
                 detail: ex.Message,
                 statusCode: StatusCodes.Status500InternalServerError);
         }
+    }
+
+    private IActionResult InvalidModel(AccountCreateRequestDto request)
+    {
+        logger.LogWarning("Invalid request data {@Request}", request);
+        return ValidationProblem(ModelState);
     }
 }

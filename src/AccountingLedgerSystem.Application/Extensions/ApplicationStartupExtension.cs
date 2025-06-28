@@ -12,6 +12,6 @@ namespace AccountingLedgerSystem.Application.Extensions
             services.AddCoreServices();
             return services;
         }
-     
+
     }
 }

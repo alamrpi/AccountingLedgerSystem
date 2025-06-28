@@ -21,7 +21,7 @@ namespace AccountingLedgerSystem.Infrastructure.Repositories
             _logger = logger;
         }
 
-      
+
         public async Task<PaginatedResult<JournalEntryWithLinesDto>> GetPaginatedAsync(JournalEntriesQueryParams queryParams)
         {
             try
@@ -75,7 +75,7 @@ namespace AccountingLedgerSystem.Infrastructure.Repositories
                     TotalCount = totalCount,
                     PageNumber = queryParams.PageNumber,
                     PageSize = queryParams.PageSize,
-                   
+
                 };
             }
             catch (SqlException sqlEx)

@@ -1,6 +1,4 @@
-﻿using AccountingLedgerSystem.Core.Enums;
-
-namespace AccountingLedgerSystem.Application.DTOs
+﻿namespace AccountingLedgerSystem.Application.DTOs
 {
     public class AccountDto
     {

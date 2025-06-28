@@ -7,7 +7,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Mime;
-using System.Text.Json;
 
 namespace AccountingLedgerSystem.API.Controllers
 {

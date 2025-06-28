@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AccountingLedgerSystem.Shared.Dto
+﻿namespace AccountingLedgerSystem.Shared.Dto
 {
 
     public class PaginatedResult<T>

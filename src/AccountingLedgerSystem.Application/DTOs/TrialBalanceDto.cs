@@ -11,5 +11,5 @@
         public string BalanceType { get; set; } = string.Empty;
         public string FinancialStatement { get; set; } = string.Empty;
     }
-  
+
 }
