@@ -1,5 +1,6 @@
 import { useJournalEntries } from '../hooks/useJournalEntries';
 import { useAccounts } from '../hooks/useAccounts';
+import { useNavigate } from 'react-router-dom';
 import PageHeader from '../components/common/PageHeader';
 import JournalEntryForm from '../components/accounting/JournalEntryForm';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -7,9 +8,11 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 const JournalEntryPage = () => {
   const { accounts, isLoading: isLoadingAccounts } = useAccounts();
   const { addEntry, isLoading: isSubmitting } = useJournalEntries();
-
+  const navigate = useNavigate();
+  
   const handleSubmit = async (formData) => {
     await addEntry(formData);
+     navigate('/journal-entries');
   };
 
   return (

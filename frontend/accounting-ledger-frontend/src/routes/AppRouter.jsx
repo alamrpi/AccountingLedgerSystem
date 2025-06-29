@@ -9,7 +9,7 @@ export default function AppRouter() {
   return (
     <Layout>
         <Routes>
-          <Route path="/" element={<AccountsPage />} />
+           <Route index element={<AccountsPage />} />
           <Route path="/accounts" element={<AccountsPage />} />
           <Route path="/journal-entries" element={<JournalEntriesPage />} />
           <Route path="/add-journal-entry" element={<JournalEntryPage />} />
